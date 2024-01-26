@@ -43,11 +43,48 @@ def smartloop3():
                 print(f"a = {a}  b = {b}  c = {c}")
 
 
+def singleLoop():
+    b = 0
+
+    for a in range(0, 2022):
+        inner = (a * a) - (2021 * a) + 1020100
+        if inner < 0:
+            continue
+
+        c = 1010 - math.sqrt(inner)
+        if a == 0 and c == 0:
+            continue
+
+        if c != math.trunc(c):
+            continue
+
+        if c == 0:
+            b = 0
+            c = 2020 - (a * b)
+        else:
+            b = (2021 - a) / c
+
+        if b != math.trunc(b):
+            continue
+
+        if (a * b + c == 2020) and (a + b * c == 2021):
+            print(f"a = {a}  b = {b}  c = {c}")
+
+
+def timeFunction(functionName, func):
+    print(f"{functionName}")
+    tic = time.perf_counter()
+    func()
+    toc = time.perf_counter()
+    print(f"Executed in {toc - tic:0.4f} seconds\n")
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    tic = time.perf_counter()
-    smartloop3()
-    toc = time.perf_counter()
-    print(f"Executed in {toc - tic:0.4f} seconds")
+    timeFunction("bigloop", bigloop)
+    timeFunction("smartloop1", smartloop1)
+    timeFunction("smartloop2", smartloop2)
+    timeFunction("smartloop3", smartloop3)
+    timeFunction("singleLoop", singleLoop)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
