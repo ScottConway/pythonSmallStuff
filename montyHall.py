@@ -1,6 +1,8 @@
 import random
 import time
 
+from rich import print
+
 LOOPSIZE = 1000000
 
 def simpleMontyHall():
