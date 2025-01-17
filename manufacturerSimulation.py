@@ -7,6 +7,9 @@ class Station:
         self.backLog = 0
         self.maxBackLog = 0
         self.clocktick = 0
+        self.processingTime = 0
+        self.timeWaiting = 0
+        self.itemsProcessed = 0
 
     def receive(self):
         self.backLog += 1
@@ -14,13 +17,17 @@ class Station:
             self.maxBackLog = self.backLog
         # print(f'{self.name} received.  Back Log: {self.backLog}    maxBackLog: {self.maxBackLog}')
 
-    def process(self):
+    def process(self, moreToProcess: bool):
         if self.backLog > 0:
+            self.processingTime += 1
             if self.clocktick == self.processingSpeed:
                 self.send()
             self.clocktick += 1
+        elif moreToProcess:
+            self.timeWaiting += 1
+
         if self.nextStation is not None:
-            self.nextStation.process()
+            self.nextStation.process(moreToProcess)
 
     def hasBacklog(self):
         if self.backLog > 0:
@@ -32,10 +39,14 @@ class Station:
 
     def send(self):
         self.backLog -= 1
+        self.itemsProcessed += 1
         self.clocktick = 0
         if self.nextStation is not None:
             self.nextStation.receive()
         # print(f'{self.name} sent.  Back Log: {self.backLog}    maxBackLog: {self.maxBackLog}')
+
+    def printStatus(self):
+        print(f'Station {self.name}\t items processed: {self.itemsProcessed}\t backlog: {self.backLog}\t processing time: {self.processingTime}\t timewait: {self.timeWaiting}\t maxbacklog: {self.maxBackLog}')
 
 
 def startSimulation(numItems: int):
@@ -59,16 +70,16 @@ def startSimulation(numItems: int):
             station1.receive()
             totalItemsToProcess -= 1
 
-        station1.process()
+        station1.process(totalItemsToProcess > 0)
         condition = totalItemsToProcess > 0 or station1.hasBacklog()
 
     print("Number of items to process: " + str(numItems))
     print("Total Clockticks: " + str(totalClockticks))
-    print("station 1 max backlog: " + str(station1.maxBackLog))
-    print("station 2 max backlog: " + str(station2.maxBackLog))
-    print("station 3 max backlog: " + str(station3.maxBackLog))
-    print("station 4 max backlog: " + str(station4.maxBackLog))
-    print("station 5 max backlog: " + str(station5.maxBackLog))
+    station1.printStatus()
+    station2.printStatus()
+    station3.printStatus()
+    station4.printStatus()
+    station5.printStatus()
 
 
 
