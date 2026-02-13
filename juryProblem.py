@@ -5,7 +5,7 @@ from rich import print
 
 JURYSIZE = 64
 ARRAYSIZE = JURYSIZE + 2
-MINDELTA = 0.000001
+MINDELTA = 0.0000000001
 
 def jurysimulation():
     array = np.zeros((ARRAYSIZE, ARRAYSIZE), dtype=float)
